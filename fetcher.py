@@ -188,7 +188,6 @@ def main(event, context):
     dbx = start_dropbox_session()
 
     if 'queryStringParameters' in event:
-
         if event['queryStringParameters'] is not None:
             if 'date' not in event['queryStringParameters']:
                 date = datetime.now()
@@ -207,6 +206,9 @@ def main(event, context):
     else:
         date = datetime.now()
         forced = False
+
+    if os.environ['SINGLE_STATION_COUNT'] == 'yes':
+        forced = True
 
     both_stations_processed, separate_stations_processed = check_data_exists_dropbox(dbx, date, both_stations=True)
 
@@ -262,6 +264,4 @@ def main(event, context):
 
 
 if __name__ == "__main__":
-    # main({'date': '20180827', 'forced': 'yes'}, None)
-    # main({'date': '20190917', 'forced': 'no'}, None)
     main({'queryStringParameters': {'date': '20181006', 'forced': 'yes'}}, None)

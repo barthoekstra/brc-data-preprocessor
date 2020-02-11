@@ -98,6 +98,26 @@ expected_combinations = {
     'WoodP': {'age': None, 'sex': None},
 }
 
+expected_combinations_spring = {
+    'SparrowH': {'age': None, 'sex':  None},
+    'Kest/LesKest': {'age': None, 'sex': None},
+    'ShortEO': {'age': None, 'sex': None},
+    'LesKes': {'age': ['A', None], 'sex': ['M', None]},
+    'Goshawk': {'age': ['J', 'A', None], 'sex': None},
+    'ComKes': {'age': ['A', None], 'sex': ['M', None]},
+    'LevantS/Sparrow': {'age': None, 'sex': None},
+    'Merlin': {'age': ['A', None], 'sex': ['M', None]},
+    'Hobby': {'age': ['J', 'I', 'A', 'Non-Juv', None], 'sex': None},
+    'Hobby/RedFF': {'age': ['J', None], 'sex': None},
+    'LevantSH': {'age': ['J', 'A', None], 'sex': ['M', 'F', None]},
+    'Buz/HonBuz': {'age': None, 'sex': None},
+    'RedFF': {'age': ['J', 'A', None], 'sex': ['M', 'F', 'FC', None]},
+}
+
+if datetime.datetime.strptime(season_start, '%Y-%m-%d').month <= 6 and \
+        datetime.datetime.strptime(season_end, '%Y-%m-%d').month <= 6:
+    expected_combinations.update(expected_combinations_spring)
+
 
 def preprocess_raw_trektellen_data(data_csv, times=None, date=None, split_by_station=False):
     data = pd.read_csv(data_csv)
