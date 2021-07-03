@@ -3,6 +3,9 @@ The data preprocessor checks the raw [Batumi Raptor Count](https://www.batumirap
 
 Author: Bart Hoekstra | Mail: [bart.hoekstra@batumiraptorcount.org](mailto:bart.hoekstra@batumiraptorcount.org)
 
+## General workflow
+The preprocessor runs on [Amazon Lambda](https://aws.amazon.com/lambda/) and regularly checks the [Trektellen](https://www.trektellen.org) site for newly uploaded [BRC counts](https://www.batumiraptorcount.org/migration-count-data). If both stations have uploaded data for the day, the fetcher will download the data and store a raw version of the data in Dropbox (in e.g. `2019/data/raw`). The preprocessor subsequently checks a copy of the raw data for all kinds of possible errors and flags them by adding a description of the potential problem to a `check` column in the file stored in `2019/data/inprogress`. It is then up to coordinators to use their experience and knowledge of the migration during a given day to determine the validity of the flags added by the preprocessor and act accordingly. Once they have dealt with these issues and emptied the `check` column of flags, the file can be moved to `2019/data/clean`. 
+
 ## Flagged records
 The following records will be flagged by the preprocessor:
 - Records with invalid doublecount entries (e.g. not within 10 minutes or with the wrong distance code).
