@@ -14,6 +14,7 @@ from datetime import datetime
 import re
 
 import requests
+import urllib3
 import dropbox
 import dropbox.exceptions
 import dropbox.files
@@ -31,8 +32,10 @@ def start_trektellen_session():
     :return: session object
     """
     session = requests.Session()
-    r = session.post(os.environ['TREKTELLEN_LOGIN_URL'], {'identity': os.environ['TREKTELLEN_USERNAME'],
-                                                          'password': os.environ['TREKTELLEN_PASSWORD']})
+    urllib3.disable_warnings()
+    r = session.post(os.environ['TREKTELLEN_LOGIN_URL'],
+                     {'identity': os.environ['TREKTELLEN_USERNAME'],'password': os.environ['TREKTELLEN_PASSWORD']},
+                     verify=False)
 
     if r.url != os.environ['TREKTELLEN_SUCCESSFUL_LOGIN_URL']:
         raise ValueError('Cannot login. Trektellen login credentials are probably incorrect.')
