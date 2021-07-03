@@ -53,7 +53,7 @@ expected_combinations = {
     'BootedE': {'age': ['J', 'Non-Juv', None], 'sex': None},
     'Buzzard_SPEC': {'age': None, 'sex': None},
     'CrestedHB': {'age': ['J', 'A'], 'sex': ['M', 'F']},
-    'DalPel': {'age': ['J', 'I', 'A', 'Non-Juv', None], 'sex': None},
+    'DalmatianP': {'age': ['J', 'I', 'A', 'Non-Juv', None], 'sex': None},
     'DemCrane': {'age': ['J', 'A', 'I', 'Non-Juv', None], 'sex': None},
     'Dove_SPEC': {'age': None, 'sex': None},
     'EgyptianV': {'age': ['J', 'I', 'A', 'Non-Juv'], 'sex': None},
@@ -92,7 +92,7 @@ expected_combinations = {
     'StockD': {'age': None, 'sex': None},
     'Stork_SPEC': {'age': None, 'sex': None},
     'TurtleD': {'age': None, 'sex': None},
-    'WhitePel': {'age': ['J', 'I', 'A', 'Non-Juv', None], 'sex': None},
+    'WhiteP': {'age': ['J', 'I', 'A', 'Non-Juv', None], 'sex': None},
     'WhiStork': {'age': ['J', 'A', 'Non-Juv', None], 'sex': None},
     'WhiteTE': {'age': ['J', 'I', 'A', 'Non-Juv'], 'sex': None},
     'WoodP': {'age': None, 'sex': None},
@@ -161,6 +161,8 @@ def preprocess_raw_trektellen_data(data_csv, times=None, date=None, split_by_sta
     data.loc[(data.speciesname == 'dove (Columba) sp.'), 'speciesname'] = 'Dove_SPEC'
     data.loc[(data.speciesname == 'Harrier-SPEC'), 'speciesname'] = 'Harrier_SPEC'
     data.loc[(data.speciesname == 'Oriental Turtle-Dove'), 'speciesname'] = 'OrientalTD'
+    data.loc[(data.speciesname == 'WhitePel'), 'speciesname'] = 'WhiteP'
+    data.loc[(data.speciesname == 'DalPel'), 'speciesname'] = 'DalmatianP'
 
     # Sort file by newly created dates and telpost names
     data.sort_values(by=['datetime', 'telpost'], inplace=True)
