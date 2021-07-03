@@ -89,7 +89,8 @@ def check_data_availability_trektellen(session, date, both_stations=True):
 
 
 def parse_trektellen_count_times(date, html):
-    times = re.search('Counting period: (\d{2}:\d{2}) - (\d{2}:\d{2})', html)
+    # Regex parse times after removal of spaces for more robust matching (changes in Trektellen time display)
+    times = re.search('Countingperiod:(\d{2}:\d{2})-(\d{2}:\d{2})', html.replace(" ", ""))
     start = datetime.combine(date, datetime.strptime(times.group(1), '%H:%M').time())
     stop = datetime.combine(date, datetime.strptime(times.group(2), '%H:%M').time())
     return start, stop
