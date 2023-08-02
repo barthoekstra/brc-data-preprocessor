@@ -250,17 +250,18 @@ def main(event, context):
         upload_file(dbx, s1_path, remote_raw_s1, overwrite=False)
         upload_file(dbx, s2_path, remote_raw_s2, overwrite=False)
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        os.chdir(tmpdir)
-
         remote_checked_s1 = '{}/inprogress/{}'.format(os.environ['DROPBOX_ROOT_DATA_FOLDER'], s1_path)
         remote_checked_s2 = '{}/inprogress/{}'.format(os.environ['DROPBOX_ROOT_DATA_FOLDER'], s2_path)
+        remote_checked_s1_backup = '{}/inprogress-backup/{}'.format(os.environ['DROPBOX_ROOT_DATA_FOLDER'], s1_path)
+        remote_checked_s2_backup = '{}/inprogress-backup/{}'.format(os.environ['DROPBOX_ROOT_DATA_FOLDER'], s2_path)
 
         checked_station1.to_excel(s1_path, index=False)
         checked_station2.to_excel(s2_path, index=False)
 
         upload_file(dbx, s1_path, remote_checked_s1, overwrite=False)
         upload_file(dbx, s2_path, remote_checked_s2, overwrite=False)
+        upload_file(dbx, s1_path, remote_checked_s1_backup, overwrite=False)
+        upload_file(dbx, s2_path, remote_checked_s2_backup, overwrite=False)
 
     message = 'Data for {} has finished processing and is uploaded to Dropbox'.format(date.strftime('%d-%m-%Y'))
     response = create_html_response(message)
