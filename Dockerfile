@@ -1,4 +1,4 @@
-FROM amazonlinux
+FROM amazonlinux:2.0.20230307.0
 
 RUN yum -y install git \
     python37 \
