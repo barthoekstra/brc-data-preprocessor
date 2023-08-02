@@ -233,7 +233,7 @@ def main(event, context):
 
     raw_all, raw_station1, raw_station2 = prep.preprocess_raw_trektellen_data(data, times,
                                                                               date=date, split_by_station=True)
-    checked_all, checked_station1, checked_station2 = prep.preprocess_trektellen_data(raw_all, split_by_station=True)
+    _, checked_station1, checked_station2 = prep.preprocess_trektellen_data(raw_all, split_by_station=True)
 
     s1_path = '{}_S1.xlsx'.format(date.strftime('%Y%m%d'))
     s2_path = '{}_S2.xlsx'.format(date.strftime('%Y%m%d'))
