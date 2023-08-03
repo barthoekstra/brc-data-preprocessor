@@ -4,7 +4,7 @@ The data preprocessor checks the raw [Batumi Raptor Count](https://www.batumirap
 Author: Bart Hoekstra | Mail: [bart.hoekstra@batumiraptorcount.org](mailto:bart.hoekstra@batumiraptorcount.org)
 
 ## General workflow
-The preprocessor runs on [Amazon Lambda](https://aws.amazon.com/lambda/) and regularly checks the [Trektellen](https://www.trektellen.org) site for newly uploaded [BRC counts](https://www.batumiraptorcount.org/migration-count-data). If both stations have uploaded data for the day, the fetcher will download the data and store a raw version of the data in Dropbox (in e.g. `2019/data/raw`). The preprocessor subsequently checks a copy of the raw data for all kinds of possible errors and flags them by adding a description of the potential problem to a `check` column in the file stored in `2019/data/inprogress`. It is then up to coordinators to use their experience and knowledge of the migration during a given day to determine the validity of the flags added by the preprocessor and act accordingly. Once they have dealt with these issues and emptied the `check` column of flags, the file can be moved to `2019/data/clean`. 
+The preprocessor runs on [Amazon Lambda](https://aws.amazon.com/lambda/) and regularly checks the [Trektellen](https://www.trektellen.org) site for newly uploaded [BRC counts](https://www.batumiraptorcount.org/migration-count-data). If both stations have uploaded data for the day, the fetcher will download the data and store a raw version of the data in Dropbox (in e.g. `2019/data/raw`). The preprocessor subsequently checks a copy of the raw data for all kinds of possible errors and flags them by adding a description of the potential problem to a `check` column in the file stored in `2019/data/inprogress`. It is then up to coordinators to use their experience and knowledge of the migration during a given day to determine the validity of the flags added by the preprocessor and act accordingly. Once they have dealt with these issues and emptied the `check` column of flags, the file can be moved to `2019/data/clean`. A copy of the checked file gets stored in `2019/data/inprogress-backup`, so data technicians can check how changes to the data have been made.
 
 ## Flagged records
 The following records will be flagged by the preprocessor:
@@ -29,21 +29,23 @@ The following records will be flagged by the preprocessor:
 ## Future additions
 - [ ] Implement checks for possibly erroneous records based on some statistical rules, e.g. the expected (daily) phenology of a species.
 
-## Build Lambda deployment package (requires Docker and AWS CLI)
+## Build Lambda deployment Docker image (requires Docker and AWS CLI)
 1. Clone this repository.
-2. Copy preprocessor function files to `lambda/` directory.
+2. `cd` into this directory.
+3. Build the [Docker](https://docs.docker.com/install/) image to generate a deployment image for the function.
     ```
-    cp $(pwd)/{fetcher.py,preprocessor.py,requirements.txt} lambda/
+    docker build --platform linux/amd64 -t brc-data-preprocessor-docker:v1 . 
     ```
-3. Build the [Docker](https://docs.docker.com/install/) image to generate a deployment package of function code. 
+4. Tag docker image. Replace XXXXXX with your account ID.
     ```
-    docker build -t brc-data-preprocessor .
+    docker tag brc-data-preprocessor-docker:v1 XXXXXX.dkr.ecr.eu-central-1.amazonaws.com/brc-data-preprocessor-docker:latest
     ```
-4. Run the Docker container to generate a `function.zip` deployment package in `lambda/`. 
+5. Push docker image to Amazon container repository. Replace XXXXXX with your account ID.
     ```
-    docker run -it -v $(pwd)/lambda:/lambda brc-data-preprocessor bash /lambda/deploypackage.sh
+    docker push XXXXXX.dkr.ecr.eu-central-1.amazonaws.com/brc-data-preprocessor-docker:latest
     ```
-5. Update Lambda function with new package `function.zip` through the [AWS CLI](https://aws.amazon.com/cli/). 
+6. Update function. Replace XXXXXX with your account ID.
     ```
-    aws lambda update-function-code --function-name brc-data-preprocessor --zip-file fileb://lambda/function.zip
+    aws lambda update-function-code --function-name brc-data-preprocessor-docker \
+    --image-uri XXXXXX.dkr.ecr.eu-central-1.amazonaws.com/brc-data-preprocessor-docker:latest
     ```

@@ -1,9 +1,7 @@
-FROM amazonlinux:2.0.20230307.0
+FROM public.ecr.aws/lambda/python:3.10
 
-RUN yum -y install git \
-    python37 \
-    python37-pip \
-    zip \
-    && yum clean all
+COPY requirements.txt fetcher.py preprocessor.py ${LAMBDA_TASK_ROOT}
 
-RUN python3 -m pip install --upgrade pip
+RUN pip3 install -r requirements.txt
+
+CMD [ "fetcher.main" ]

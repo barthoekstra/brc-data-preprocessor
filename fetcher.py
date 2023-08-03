@@ -12,6 +12,7 @@ import io
 import tempfile
 from datetime import datetime
 import re
+import json
 
 import requests
 import urllib3
@@ -189,6 +190,8 @@ def create_html_response(message):
 
 
 def main(event, context):
+    print('event:', json.dumps(event))
+
     dbx = start_dropbox_session()
 
     if 'queryStringParameters' in event:

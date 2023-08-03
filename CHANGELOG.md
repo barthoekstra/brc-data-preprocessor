@@ -1,5 +1,12 @@
 # Changelog
 
+## 2023.1 - 2023-08-03
+### Added
+- An extra copy of the checked data gets added to a `inprogress-backup` folder on Dropbox, to ensure data technicians can keep track of data cleaning steps taken.
+
+### Changed
+- The function ran using a .zip archive, but to make development easier we switch to a Dockerized approach.
+
 ## 2021.1 - 2021-07-03
 ### Added
 - A ‘single station count’ mode is added for the spring counts, which can be activated by setting environment variable `SINGLE_STATION_COUNT=yes`
